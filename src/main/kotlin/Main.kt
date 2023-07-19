@@ -1,8 +1,8 @@
 fun main() {
 
-    val user1 = User("Nikolay", balance = 35000, age = 32, CardType.MASTERCARD)
-    val user2 = User("Sergey", balance = 69009, age = 23, CardType.VISA)
-    val user3 = User("Ivan", balance = 46980, age = 29, CardType.VKPAY)
+    val user1 = User("Nikolay", balance = 235000, age = 32, CardType.MASTERCARD)
+    val user2 = User("Sergey", balance = 369009, age = 23, CardType.VISA)
+    val user3 = User("Ivan", balance = 446980, age = 29, CardType.VKPAY)
 
     when (val comission = user1.getComission(user1.cardType, user1.totalSum, 120000)) {
         null -> println("Перевод невозможен")
@@ -14,13 +14,10 @@ fun main() {
         else -> println("Комиссия составит - $comission")
     }
 
-    when (val comission = user3.getComission(user3.cardType, 4000, 14900)) {
+    when (val comission = user3.getComission(user3.cardType, 4000, 15900)) {
         null -> println("Перевод невозможен")
         else -> println("Комиссия составит - $comission")
-
     }
-
-
 }
 
 enum class CardType {
@@ -41,28 +38,27 @@ data class User(
     fun getComission(cardType: CardType, totalSum: Int, amountTransfer: Int): Double? {
         val minSum = 35.0
         return when {
-            (amountTransfer + totalSum in 0..75000)
-            -> {
-                (if (totalSum + amountTransfer > 600000) null
-                else 0)?.toDouble()
-            }
+            (amountTransfer + totalSum <= 75000)
+            -> if ((cardType == CardType.VKPAY) &&
+                (amountTransfer > 15000 || totalSum + amountTransfer > 40000)
+            ) null
+            else 0.toDouble()
 
             else -> {
-                (when {
-                    (cardType == CardType.MASTERCARD) or (cardType == CardType.MAESTRO)
-                    -> if ((amountTransfer > 150000) or (totalSum + amountTransfer > 600000)) null
-                    else ((amountTransfer / 100) * 0.6 + 20)
+                if ((cardType == CardType.MASTERCARD || cardType == CardType.MAESTRO) &&
+                    (amountTransfer < 150000 || totalSum + amountTransfer < 600000)
+                ) {
+                    return (amountTransfer / 100) * 0.6 + 20
+                } else
+                    null
 
-                    (cardType == CardType.VISA) or (cardType == CardType.MIR)
-                    -> if ((amountTransfer > 150000) or (totalSum + amountTransfer > 600000)) null
-                    else if ((amountTransfer / 100) * 0.75 < minSum) minSum
-                    else (amountTransfer / 100) * 0.75
-
-                    (cardType == CardType.VKPAY) ->
-                        if ((amountTransfer > 15000) or (totalSum + amountTransfer > 40000)) null else 0
-
-                    else -> null
-                })?.toDouble()
+                if ((cardType == CardType.VISA || cardType == CardType.MIR) &&
+                    (amountTransfer < 150000 || totalSum + amountTransfer < 600000)
+                ) {
+                    if ((amountTransfer / 100) * 0.75 < minSum) minSum
+                    else return (amountTransfer / 100) * 0.75
+                } else
+                    null
             }
         }
     }
