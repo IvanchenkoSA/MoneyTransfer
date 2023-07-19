@@ -2,19 +2,19 @@ fun main() {
 
     val user1 = User("Nikolay", balance = 235000, age = 32, CardType.MASTERCARD)
     val user2 = User("Sergey", balance = 369009, age = 23, CardType.VISA)
-    val user3 = User("Ivan", balance = 446980, age = 29, CardType.VKPAY)
+    val user3 = User("Ivan", balance = 446980, age = 29)
 
     when (val comission = user1.getComission(user1.cardType, user1.totalSum, 120000)) {
         null -> println("Перевод невозможен")
         else -> println("Комиссия составит - $comission")
     }
 
-    when (val comission = user2.getComission(user2.cardType, 300000, 130000)) {
+    when (val comission = user2.getComission(user2.cardType, user2.totalSum, 130000)) {
         null -> println("Перевод невозможен")
         else -> println("Комиссия составит - $comission")
     }
 
-    when (val comission = user3.getComission(user3.cardType, 4000, 15900)) {
+    when (val comission = user3.getComission(user3.cardType, user3.totalSum, 15900)) {
         null -> println("Перевод невозможен")
         else -> println("Комиссия составит - $comission")
     }
@@ -32,7 +32,7 @@ data class User(
     var name: String,
     var balance: Int,
     var age: Int,
-    var cardType: CardType,
+    var cardType: CardType = CardType.VKPAY,
     var totalSum: Int = 0
 ) {
     fun getComission(cardType: CardType, totalSum: Int, amountTransfer: Int): Double? {
