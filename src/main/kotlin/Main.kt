@@ -54,25 +54,30 @@ data class User(
                 val exceedMinSum = amountTransfer + totalSum >= 75000
                 val lessThanMaxSum = amountTransfer < lowLim || totalSum + amountTransfer < lim
 
-                if (!exceedMinSum && lessThanMaxSum) {
+                if (lessThanMaxSum) {
+                    if (exceedMinSum) {
+                        (amountTransfer / 100) * 0.6 + 20
+                    } else {
+                        null
+                    }
+                } else {
                     return 0.0
                 }
-                if (exceedMinSum && lessThanMaxSum) {
-                    (amountTransfer / 100) * 0.6 + 20
-                } else null
             }
 
             CardType.VISA,
             CardType.MIR -> {
-                val exceedMinSum = (amountTransfer / 100) * 0.75 < minSum
+                val overMinSum = (amountTransfer / 100) * 0.75 < minSum
                 val lessThanMaxSum = amountTransfer < lowLim || totalSum + amountTransfer < lim
 
-                if (exceedMinSum && lessThanMaxSum) {
+                if (overMinSum && lessThanMaxSum) {
                     return minSum
                 }
-                if (!exceedMinSum && lessThanMaxSum) {
+                if (!overMinSum && lessThanMaxSum) {
                     (amountTransfer / 100) * 0.6 + 20
-                } else null
+                } else {
+                    null
+                }
             }
         }
     }
