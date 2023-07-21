@@ -3,17 +3,17 @@ fun main() {
     val user2 = User("Sergey", balance = 369009, age = 23, CardType.VISA)
     val user3 = User("Ivan", balance = 446980, age = 29)
 
-    when (val comission = user1.getComission(user1.cardType, user1.totalSum, 400000)) {
+    when (val comission = user1.getComission(user1.totalSum, 60000)) {
         null -> println("Перевод невозможен")
         else -> println("Комиссия составит - $comission")
     }
 
-    when (val comission = user2.getComission(user2.cardType, user2.totalSum, 130000)) {
+    when (val comission = user2.getComission(user2.totalSum, 3000)) {
         null -> println("Перевод невозможен")
         else -> println("Комиссия составит - $comission")
     }
 
-    when (val comission = user3.getComission(user3.cardType, user3.totalSum, 15900)) {
+    when (val comission = user3.getComission(user3.totalSum, 15900)) {
         null -> println("Перевод невозможен")
         else -> println("Комиссия составит - $comission")
     }
@@ -34,14 +34,14 @@ data class User(
     var cardType: CardType = CardType.VKPAY,
     var totalSum: Int = 0,
 ) {
-    fun getComission(cardType: CardType, totalSum: Int, amountTransfer: Int): Double? {
+    fun getComission(totalSum: Int, amountTransfer: Int): Double? {
         val lim = 600000
         val lowLim = 150000
-        val minSum = 35
+        val minSum = 35.0
         return when (cardType) {
-            CardType.MASTERCARD, CardType.MAESTRO -> if ((amountTransfer + totalSum >= 75000) &&
-                (amountTransfer < lowLim || totalSum + amountTransfer < lim)
-            ) {
+            CardType.MASTERCARD, CardType.MAESTRO -> if (amountTransfer + totalSum <= 75000) {
+                0.0
+            } else if(amountTransfer < lowLim || totalSum + amountTransfer < lim) {
                 (amountTransfer / 100) * 0.6 + 20
             } else {
                 null
@@ -50,17 +50,17 @@ data class User(
             CardType.VISA, CardType.MIR -> if (amountTransfer < lowLim || totalSum + amountTransfer < lim) {
                 if ((amountTransfer / 100) * 0.75 < minSum) {
                     minSum
-                } else{
+                } else {
                     (amountTransfer / 100) * 0.75
                 }
             } else {
                 null
-            }?.toDouble()
+            }
 
             CardType.VKPAY -> if (amountTransfer > 15000 || totalSum + amountTransfer > 40000) {
                 null
             } else {
-                0.toDouble()
+                0.0
             }
         }
     }
