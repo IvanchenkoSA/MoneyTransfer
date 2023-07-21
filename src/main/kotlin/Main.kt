@@ -3,17 +3,17 @@ fun main() {
     val user2 = User("Sergey", balance = 369009, age = 23, CardType.VISA)
     val user3 = User("Ivan", balance = 446980, age = 29)
 
-    when (val comission = user1.getComission(user1.totalSum, 60000)) {
+    when (val comission = user1.getComission(user1.totalSum, 80000)) {
         null -> println("Перевод невозможен")
         else -> println("Комиссия составит - $comission")
     }
 
-    when (val comission = user2.getComission(user2.totalSum, 3000)) {
+    when (val comission = user2.getComission(user2.totalSum, 30000)) {
         null -> println("Перевод невозможен")
         else -> println("Комиссия составит - $comission")
     }
 
-    when (val comission = user3.getComission(user3.totalSum, 15900)) {
+    when (val comission = user3.getComission(user3.totalSum, 13900)) {
         null -> println("Перевод невозможен")
         else -> println("Комиссия составит - $comission")
     }
@@ -39,31 +39,44 @@ data class User(
         val lowLim = 150000
         val minSum = 35.0
         return when (cardType) {
-            CardType.MASTERCARD, CardType.MAESTRO -> if (amountTransfer + totalSum <= 75000) {
-                0.0
-            } else if(amountTransfer < lowLim || totalSum + amountTransfer < lim) {
-                (amountTransfer / 100) * 0.6 + 20
-            } else {
-                null
-            }
+            CardType.VKPAY -> {
+                val outOfLimit = amountTransfer > 15000 || totalSum + amountTransfer > 40000
 
-            CardType.VISA, CardType.MIR -> if (amountTransfer < lowLim || totalSum + amountTransfer < lim) {
-                if ((amountTransfer / 100) * 0.75 < minSum) {
-                    minSum
+                if (outOfLimit) {
+                    null
                 } else {
-                    (amountTransfer / 100) * 0.75
+                    0.0
                 }
-            } else {
-                null
             }
 
-            CardType.VKPAY -> if (amountTransfer > 15000 || totalSum + amountTransfer > 40000) {
-                null
-            } else {
-                0.0
+            CardType.MASTERCARD,
+            CardType.MAESTRO -> {
+                val exceedMinSum = amountTransfer + totalSum >= 75000
+                val lessThanMaxSum = amountTransfer < lowLim || totalSum + amountTransfer < lim
+
+                if (!exceedMinSum && lessThanMaxSum) {
+                    return 0.0
+                }
+                if (exceedMinSum && lessThanMaxSum) {
+                    (amountTransfer / 100) * 0.6 + 20
+                } else null
+            }
+
+            CardType.VISA,
+            CardType.MIR -> {
+                val exceedMinSum = (amountTransfer / 100) * 0.75 < minSum
+                val lessThanMaxSum = amountTransfer < lowLim || totalSum + amountTransfer < lim
+
+                if (exceedMinSum && lessThanMaxSum) {
+                    return minSum
+                }
+                if (!exceedMinSum && lessThanMaxSum) {
+                    (amountTransfer / 100) * 0.6 + 20
+                } else null
             }
         }
     }
 }
+
 
 
