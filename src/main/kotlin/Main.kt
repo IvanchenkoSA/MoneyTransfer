@@ -3,18 +3,18 @@ fun main() {
     val user2 = User("Sergey", balance = 369009, age = 23, CardType.VISA)
     val user3 = User("Ivan", balance = 446980, age = 29)
 
-    when (val comission = user1.getComission(user1.totalSum, 80000)) {
-        null -> println("Перевод невозможен")
+    when (val comission = user1.getComission(user1.totalSum, 99000)) {
+        null -> println("Out of limit")
         else -> println("Комиссия составит - $comission")
     }
 
     when (val comission = user2.getComission(user2.totalSum, 30000)) {
-        null -> println("Перевод невозможен")
+        null -> println("Out of limit")
         else -> println("Комиссия составит - $comission")
     }
 
-    when (val comission = user3.getComission(user3.totalSum, 13900)) {
-        null -> println("Перевод невозможен")
+    when (val comission = user3.getComission(user3.totalSum, 15900)) {
+        null -> println("Out of limit")
         else -> println("Комиссия составит - $comission")
     }
 }
@@ -34,7 +34,7 @@ data class User(
     var cardType: CardType = CardType.VKPAY,
     var totalSum: Int = 0,
 ) {
-    fun getComission(totalSum: Int, amountTransfer: Int): Double? {
+    fun getComission(totalSum: Int, amountTransfer: Int): Any? {
         val lim = 600000
         val lowLim = 150000
         val minSum = 35.0
@@ -58,10 +58,10 @@ data class User(
                     if (exceedMinSum) {
                         (amountTransfer / 100) * 0.6 + 20
                     } else {
-                        null
+                        return 0.0
                     }
                 } else {
-                    return 0.0
+                    null
                 }
             }
 
@@ -70,11 +70,12 @@ data class User(
                 val overMinSum = (amountTransfer / 100) * 0.75 < minSum
                 val lessThanMaxSum = amountTransfer < lowLim || totalSum + amountTransfer < lim
 
-                if (overMinSum && lessThanMaxSum) {
-                    return minSum
-                }
-                if (!overMinSum && lessThanMaxSum) {
-                    (amountTransfer / 100) * 0.6 + 20
+                if (lessThanMaxSum) {
+                    if (overMinSum) {
+                        return minSum
+                    } else {
+                        (amountTransfer / 100) * 0.6 + 20
+                    }
                 } else {
                     null
                 }
@@ -82,6 +83,8 @@ data class User(
         }
     }
 }
+
+
 
 
 
