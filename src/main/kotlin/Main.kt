@@ -34,7 +34,7 @@ data class User(
     var cardType: CardType = CardType.VKPAY,
     var totalSum: Int = 0,
 ) {
-    fun getComission(totalSum: Int, amountTransfer: Int): Any? {
+    fun getComission(totalSum: Int, amountTransfer: Int): Double? {
         val lim = 600000
         val lowLim = 150000
         val minSum = 35.0
@@ -51,7 +51,7 @@ data class User(
 
             CardType.MASTERCARD,
             CardType.MAESTRO -> {
-                val exceedMinSum = amountTransfer + totalSum >= 75000
+                val exceedMinSum = amountTransfer >= 75000
                 val lessThanMaxSum = amountTransfer < lowLim || totalSum + amountTransfer < lim
 
                 if (lessThanMaxSum) {
