@@ -3,7 +3,7 @@ fun main() {
     val user2 = User("Sergey", balance = 369009, age = 23, CardType.VISA)
     val user3 = User("Ivan", balance = 446980, age = 29)
 
-    when (val comission = user1.getComission(user1.totalSum, 99000)) {
+    when (val comission = user1.getComission(user1.totalSum, 0)) {
         null -> println("Out of limit")
         else -> println("Комиссия составит - $comission")
     }
@@ -41,7 +41,9 @@ data class User(
         return when (cardType) {
             CardType.VKPAY -> {
                 val outOfLimit = amountTransfer > 15000 || totalSum + amountTransfer > 40000
-
+                if (amountTransfer <= 0) {
+                    return null
+                }
                 if (outOfLimit) {
                     null
                 } else {
@@ -52,11 +54,14 @@ data class User(
             CardType.MASTERCARD,
             CardType.MAESTRO -> {
                 val exceedMinSum = amountTransfer >= 75000
-                val lessThanMaxSum = amountTransfer < lowLim || totalSum + amountTransfer < lim
+                val lessThanMaxSum = (amountTransfer < lowLim || totalSum + amountTransfer < lim) &&
+                        amountTransfer != 0 || amountTransfer < 0
 
                 if (lessThanMaxSum) {
                     if (exceedMinSum) {
                         (amountTransfer / 100) * 0.6 + 20
+                    } else if (amountTransfer <= 0) {
+                        return null
                     } else {
                         return 0.0
                     }
@@ -69,7 +74,9 @@ data class User(
             CardType.MIR -> {
                 val overMinSum = (amountTransfer / 100) * 0.75 < minSum
                 val lessThanMaxSum = amountTransfer < lowLim || totalSum + amountTransfer < lim
-
+                if (amountTransfer < 0 || amountTransfer == 0) {
+                    return null
+                }
                 if (lessThanMaxSum) {
                     if (overMinSum) {
                         return minSum
