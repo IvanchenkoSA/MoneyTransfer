@@ -13,7 +13,7 @@ class UserTest {
         val user1 = User("Ivan", balance = 446980, age = 29)
         val result = user1.getComission(totalSum, amountTransfer)
 
-        Assertions.assertEquals(0.0, result)
+        Assertions.assertEquals(null, result)
     }
 
     @Test
