@@ -16,9 +16,6 @@ dependencies {
     testImplementation 'junit:junit:4.13.1'
 }
 
-test {
-    useJUnitPlatform()
-}
 
 compileKotlin {
     kotlinOptions.jvmTarget = '1.8'
