@@ -41,7 +41,6 @@ class WallService {
         val index = posts.indexOfFirst { p -> p.id == newPost.id }
         if (index == -1) return false else {
             posts[index] = posts[index].copy(
-                id = id,
                 ownerId = newPost.ownerId,
                 date = newPost.date,
                 text = newPost.text
