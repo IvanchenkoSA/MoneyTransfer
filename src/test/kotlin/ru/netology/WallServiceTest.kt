@@ -7,18 +7,16 @@ import org.junit.Test
 
 class WallServiceTest {
     private var post = Post(
-        0,
-        0,
-        1234523,
-        "asd",
-        )
+        id = 0,
+        date = 1234523,
+        text = "asd",
+    )
 
     private var post1 = Post(
-        10,
-        0,
-        1234523,
-        "asd",
-        )
+        id = 10,
+        date = 1234523,
+        text = "asd",
+    )
 
     @Test
     fun `get post with id not equals zero(add)`() {
@@ -28,7 +26,7 @@ class WallServiceTest {
     }
 
     @Test
-    fun `Update post with existing id`(){
+    fun `Update post with existing id`() {
         val ws = WallService()
         val post3 = ws.add(post1)
         val isExisting = ws.update(post3)
@@ -37,7 +35,7 @@ class WallServiceTest {
     }
 
     @Test
-    fun `Update post without existing id`(){
+    fun `Update post without existing id`() {
         val ws = WallService()
         val isExisting = ws.update(post1)
         println(isExisting)
