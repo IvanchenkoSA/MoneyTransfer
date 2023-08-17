@@ -2,7 +2,7 @@ package ru.netology
 
 import User
 import org.junit.Test
-import kotlin.test.assertEquals
+import org.junit.Assert.*
 
 class UserTest {
 

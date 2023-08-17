@@ -1,6 +1,6 @@
 package ru.netology
 
-import Comments
+import Comment
 import Post
 import PostNotFoundException
 import WallService
@@ -34,7 +34,6 @@ class WallServiceTest {
         val ws = WallService()
         val post3 = ws.add(post1)
         val isExisting = ws.update(post3)
-        println(isExisting)
         assertEquals(true, isExisting)
     }
 
@@ -42,22 +41,21 @@ class WallServiceTest {
     fun `Update post without existing id`() {
         val ws = WallService()
         val isExisting = ws.update(post1)
-        println(isExisting)
         assertEquals(false, isExisting)
     }
 
     @Test
-    fun `Added comment with existing id`(){
+    fun `Added comment with existing id`() {
         val ws = WallService()
         val post2 = ws.add(post)
-        val result = ws.createComment(post2.id, Comments(100, "test error"))
-        assertEquals(Comments(100, "test error"), result)
+        val result = ws.createComment(post2.id, Comment(100, "test error"))
+        assertEquals(Comment(100, "test error"), result)
     }
 
     @Test(expected = PostNotFoundException::class)
-    fun `Added comment without existing id`(){
+    fun `Added comment without existing id`() {
         val ws = WallService()
-        ws.createComment(100000, Comments(100, "test error"))
+        ws.createComment(100000, Comment(100, "test error"))
     }
 
 }

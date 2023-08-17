@@ -1,4 +1,50 @@
 fun main() {
+    var post1 = Post(
+        id = 0,
+        date = 1246892,
+        text = "Hello World",
+        attachments = arrayOf(
+            VideoAttachment(Video(1488, 14, "A funny video", 88)),
+            PhotoAttachment(Photo(1, 4)),
+            MusicAttachment(Music(7, "John Lennon", "Imagine", 398)),
+            ProductAttachment(Product(1, "Book", 1230)),
+            StickerAttachment(Sticker(11, 2))
+        )
+    )
+    var post2 = Post(
+        id = 1,
+        date = 345612,
+        text = "aboba",
+        attachments = arrayOf(
+            VideoAttachment(Video(1488, 14, "A funny video", 88)),
+            PhotoAttachment(Photo(1, 4)),
+            MusicAttachment(Music(7, "John Lennon", "Imagine", 398)),
+            ProductAttachment(Product(1, "Book", 1230)),
+            StickerAttachment(Sticker(11, 2))
+        )
+    )
+    var post3 = Post(
+        id = 2,
+        date = 793455,
+        text = "фищиф",
+        attachments = arrayOf(
+            VideoAttachment(Video(1488, 14, "A funny video", 88)),
+            PhotoAttachment(Photo(1, 4)),
+            MusicAttachment(Music(7, "John Lennon", "Imagine", 398)),
+            ProductAttachment(Product(1, "Book", 1230)),
+            StickerAttachment(Sticker(11, 2))
+        )
+    )
+    var ws = WallService()
+    ws.add(post1)
+    ws.add(post2)
+    ws.add(post3)
+    ws.printPosts()
+    println(ws.update(Post(id = 1, date = 1000023, text = "New Post")))
+    ws.printPosts()
+    println(ws.createComment(3, Comment(168, "New Comment")))
+
+
     val user1 = User("Nikolay", balance = 235000, age = 32, CardType.MASTERCARD)
     val user2 = User("Sergey", balance = 369009, age = 23, CardType.VISA)
     val user3 = User("Ivan", balance = 446980, age = 29)
@@ -19,77 +65,9 @@ fun main() {
     }
 }
 
-enum class CardType {
-    MASTERCARD,
-    MAESTRO,
-    VISA,
-    MIR,
-    VKPAY
-}
 
-data class User(
-    var name: String,
-    var balance: Int,
-    var age: Int,
-    var cardType: CardType = CardType.VKPAY,
-    var totalSum: Int = 0,
-) {
-    fun getComission(totalSum: Int, amountTransfer: Int): Double? {
-        val lim = 600000
-        val lowLim = 150000
-        val minSum = 35.0
-        return when (cardType) {
-            CardType.VKPAY -> {
-                val outOfLimit = amountTransfer > 15000 || totalSum + amountTransfer > 40000
-                if (amountTransfer <= 0) {
-                    return null
-                }
-                if (outOfLimit) {
-                    null
-                } else {
-                    0.0
-                }
-            }
 
-            CardType.MASTERCARD,
-            CardType.MAESTRO -> {
-                val exceedMinSum = amountTransfer >= 75000
-                val lessThanMaxSum = (amountTransfer < lowLim || totalSum + amountTransfer < lim) &&
-                        amountTransfer != 0 || amountTransfer < 0
 
-                if (lessThanMaxSum) {
-                    if (exceedMinSum) {
-                        (amountTransfer / 100) * 0.6 + 20
-                    } else if (amountTransfer <= 0) {
-                        return null
-                    } else {
-                        return 0.0
-                    }
-                } else {
-                    null
-                }
-            }
-
-            CardType.VISA,
-            CardType.MIR -> {
-                val overMinSum = (amountTransfer / 100) * 0.75 < minSum
-                val lessThanMaxSum = amountTransfer < lowLim || totalSum + amountTransfer < lim
-                if (amountTransfer < 0 || amountTransfer == 0) {
-                    return null
-                }
-                if (lessThanMaxSum) {
-                    if (overMinSum) {
-                        return minSum
-                    } else {
-                        (amountTransfer / 100) * 0.6 + 20
-                    }
-                } else {
-                    null
-                }
-            }
-        }
-    }
-}
 
 
 

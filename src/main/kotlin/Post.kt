@@ -1,85 +1,3 @@
-import java.lang.RuntimeException
-
-fun main() {
-    var post1 = Post(
-        id = 0,
-        date = 1246892,
-        text = "Hello World",
-        attachments = arrayOf(VideoAttachment(Video(1488, 14, "A funny video", 88)),
-            PhotoAttachment(Photo(1, 4)),
-            MusicAttachments(Music(7,"John Lennon", "Imagine", 398)),
-            ProductAttachment(Product(1,"Book", 1230)),
-            StickerAttachment(Sticker(11, 2)))
-    )
-    var post2 = Post(
-        id = 1,
-        date = 345612,
-        text = "aboba",
-        attachments = arrayOf(VideoAttachment(Video(1488, 14, "A funny video", 88)),
-            PhotoAttachment(Photo(1, 4)),
-            MusicAttachments(Music(7,"John Lennon", "Imagine", 398)),
-            ProductAttachment(Product(1,"Book", 1230)),
-            StickerAttachment(Sticker(11, 2)))
-    )
-    var post3 = Post(
-        id = 2,
-        date = 793455,
-        text = "фищиф",
-        attachments = arrayOf(VideoAttachment(Video(1488, 14, "A funny video", 88)),
-            PhotoAttachment(Photo(1, 4)),
-            MusicAttachments(Music(7,"John Lennon", "Imagine", 398)),
-            ProductAttachment(Product(1,"Book", 1230)),
-            StickerAttachment(Sticker(11, 2)))
-    )
-    var ws = WallService()
-    ws.add(post1)
-    ws.add(post2)
-    ws.add(post3)
-    ws.printPosts()
-    println(ws.posts.size)
-    println(ws.update(Post(id = 1, date = 1000023, text = "New Post")))
-    ws.printPosts()
-    println(ws.createComment(3, Comments(168, "New Comment")))
-}
-
-class PostNotFoundException(message: String): RuntimeException(message)
-
-class WallService {
-    var comments = emptyArray<Comments>()
-    var posts = emptyArray<Post>()
-    private var id = 1
-
-    fun createComment(postId: Int, comment: Comments): Comments {
-        val index = posts.indexOfFirst { p -> p.id == postId}
-        if (index == -1) throw PostNotFoundException("Post not found") else{
-            comments += comment
-            return comments.last()
-        }
-    }
-
-    fun add(post: Post): Post {
-        posts += post.copy(id = id)
-        id++
-        return posts.last()
-    }
-
-    fun update(newPost: Post): Boolean {
-        val index = posts.indexOfFirst { p -> p.id == newPost.id }
-        if (index == -1) return false else {
-            posts[index] = posts[index].copy(
-                date = newPost.date,
-                text = newPost.text
-            )
-        }
-        return true
-    }
-
-    fun printPosts() {
-        posts.forEach { i -> println("$i \n")}
-    }
-
-}
-
 data class Post(
     var id: Int,
     val fromId: Int? = null,
@@ -89,10 +7,10 @@ data class Post(
     val replyPostId: Int? = null,
     val friendsOnly: Int = 0,
     val copyright: String = "Netology",
-    val reposts: Reposts = Reposts(0, false),
+    val reposts: Repost = Repost(0, false),
     val postSource: PostSource = PostSource(null, null, null, null),
     val signerId: Int = 168,
-    val copyHistory: List<Post> = emptyList(),
+    val copyHistory: Array<Post> = emptyArray(),
     val canPin: Boolean = false,
     val canDelete: Boolean = false,
     val canEdit: Boolean = false,
@@ -101,12 +19,12 @@ data class Post(
     val usFavorite: Boolean = false,
     val date: Long,
     val text: String,
-    var likes: Likes = Likes(0, userLikes = true, canLikes = true, canPublish = true),
-    var views: Views = Views(0),
+    var likes: Like = Like(0, userLikes = true, canLike = true, canPublish = true),
+    var views: View = View(0),
     val geo: Geo = Geo("01.00000, 01.00000"),
-    var comments: Comments = Comments(0," "),
+    var comments: Comment = Comment(0, " "),
     val postType: String = "Post",
-    val attachments: Array<Attachments> = emptyArray()
+    val attachments: Array<Attachment> = emptyArray()
 ) {
     override fun toString(): String {
         return "id = $id, date = $date, text = $text, comments = $comments, attachment = ${attachments.joinToString()}"
@@ -129,7 +47,7 @@ data class Post(
         if (reposts != other.reposts) return false
         if (postSource != other.postSource) return false
         if (signerId != other.signerId) return false
-        if (copyHistory != other.copyHistory) return false
+        if (!copyHistory.contentEquals(other.copyHistory)) return false
         if (canPin != other.canPin) return false
         if (canDelete != other.canDelete) return false
         if (canEdit != other.canEdit) return false
@@ -179,18 +97,18 @@ data class Post(
     }
 }
 
-interface Attachments{
+interface Attachment {
     val type: String
 }
 
-data class Sticker (
+data class Sticker(
     val productId: Int,
     val stickerId: Int
 )
 
 data class StickerAttachment(
     val sticker: Sticker
-): Attachments{
+) : Attachment {
     override val type: String = "Sticker"
 }
 
@@ -202,20 +120,20 @@ data class Product(
 
 data class ProductAttachment(
     val product: Product
-): Attachments {
+) : Attachment {
     override val type: String = "Product"
 }
 
-data class  Music(
+data class Music(
     val id: Int,
     val artist: String,
     val title: String,
     val duration: Int
 )
 
-data class MusicAttachments(
+data class MusicAttachment(
     val Music: Music
-): Attachments {
+) : Attachment {
     override val type: String = "Music"
 }
 
@@ -227,9 +145,10 @@ data class Photo(
 
 data class PhotoAttachment(
     val Photo: Photo
-): Attachments{
+) : Attachment {
     override val type: String = "Photo"
 }
+
 data class Video(
     val id: Int,
     val ownerId: Int,
@@ -240,7 +159,7 @@ data class Video(
 data class VideoAttachment(
     val Video: Video
 
-): Attachments{
+) : Attachment {
     override val type: String = "Video"
 }
 
@@ -252,16 +171,19 @@ data class PostSource(
     val url: String?,
 )
 
-data class Reposts(
+data class Repost(
     val count: Int,
     val userReposted: Boolean
 )
 
-data class Likes(
-    val count: Int, val userLikes: Boolean, val canLikes: Boolean, val canPublish: Boolean
+data class Like(
+    val count: Int,
+    val userLikes: Boolean,
+    val canLike: Boolean,
+    val canPublish: Boolean
 )
 
-data class Views(
+data class View(
     var count: Int
 )
 
@@ -269,9 +191,7 @@ data class Geo(
     val coordinates: String,
 )
 
-data class Comments(
+data class Comment(
     var id: Int,
     var text: String
 )
-
-
