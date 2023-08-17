@@ -19,12 +19,12 @@ class WallService {
 
     fun update(newPost: Post): Boolean {
         val index = posts.indexOfFirst { p -> p.id == newPost.id }
-        if (index == -1) return false else {
+        if (index == -1) throw PostNotFoundException("Post not found")
             posts[index] = posts[index].copy(
                 date = newPost.date,
                 text = newPost.text
             )
-        }
+
         return true
     }
 
