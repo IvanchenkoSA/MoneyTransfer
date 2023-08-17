@@ -8,19 +8,16 @@ import org.junit.Assert.*
 import org.junit.Test
 
 class WallServiceTest {
-
     private var post = Post(
         id = 0,
         date = 1234523,
         text = "asd",
     )
-
     private var post1 = Post(
         id = 10,
         date = 1234523,
         text = "asd",
     )
-
 
     @Test
     fun `get post with id not equals zero(add)`() {

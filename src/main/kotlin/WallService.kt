@@ -1,6 +1,6 @@
 class WallService {
-    private var comments = emptyArray<Comment>()
-    private var posts = emptyArray<Post>()
+    private var comments = emptyList<Comment>()
+    private var posts = emptyList<Post>().toMutableList()
     private var id = 1
 
     fun createComment(postId: Int, comment: Comment): Comment {

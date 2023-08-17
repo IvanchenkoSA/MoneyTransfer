@@ -56,7 +56,6 @@ class UserTest {
         assertEquals(null, result)
     }
 
-
     @Test
     fun `get comission in to min sum (Mastercard & Maestro)`() {
         val totalSum = 42000
@@ -106,7 +105,6 @@ class UserTest {
 
         assertEquals(null, result)
     }
-
 
     @Test
     fun `get comission in to min sum (VISA & MIR)`() {

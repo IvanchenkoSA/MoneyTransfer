@@ -3,7 +3,7 @@ fun main() {
         id = 0,
         date = 1246892,
         text = "Hello World",
-        attachments = arrayOf(
+        attachments = listOf(
             VideoAttachment(Video(1488, 14, "A funny video", 88)),
             PhotoAttachment(Photo(1, 4)),
             MusicAttachment(Music(7, "John Lennon", "Imagine", 398)),
@@ -15,7 +15,7 @@ fun main() {
         id = 1,
         date = 345612,
         text = "aboba",
-        attachments = arrayOf(
+        attachments = listOf(
             VideoAttachment(Video(1488, 14, "A funny video", 88)),
             PhotoAttachment(Photo(1, 4)),
             MusicAttachment(Music(7, "John Lennon", "Imagine", 398)),
@@ -27,7 +27,7 @@ fun main() {
         id = 2,
         date = 793455,
         text = "фищиф",
-        attachments = arrayOf(
+        attachments = listOf(
             VideoAttachment(Video(1488, 14, "A funny video", 88)),
             PhotoAttachment(Photo(1, 4)),
             MusicAttachment(Music(7, "John Lennon", "Imagine", 398)),
