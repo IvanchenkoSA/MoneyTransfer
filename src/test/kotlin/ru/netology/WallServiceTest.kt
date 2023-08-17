@@ -1,11 +1,14 @@
 package ru.netology
 
+import Comments
 import Post
+import PostNotFoundException
 import WallService
 import org.junit.Assert.*
 import org.junit.Test
 
 class WallServiceTest {
+
     private var post = Post(
         id = 0,
         date = 1234523,
@@ -18,10 +21,11 @@ class WallServiceTest {
         text = "asd",
     )
 
+
     @Test
     fun `get post with id not equals zero(add)`() {
         val ws = WallService()
-        var post2 = ws.add(post)
+        val post2 = ws.add(post)
         assertNotEquals(post2.id, 0)
     }
 
@@ -41,4 +45,19 @@ class WallServiceTest {
         println(isExisting)
         assertEquals(false, isExisting)
     }
+
+    @Test
+    fun `Added comment with existing id`(){
+        val ws = WallService()
+        val post2 = ws.add(post)
+        val result = ws.createComment(post2.id, Comments(100, "test error"))
+        assertEquals(Comments(100, "test error"), result)
+    }
+
+    @Test(expected = PostNotFoundException::class)
+    fun `Added comment without existing id`(){
+        val ws = WallService()
+        ws.createComment(100000, Comments(100, "test error"))
+    }
+
 }

@@ -1,3 +1,5 @@
+import java.lang.RuntimeException
+
 fun main() {
     var post1 = Post(
         id = 0,
@@ -37,11 +39,23 @@ fun main() {
     println(ws.posts.size)
     println(ws.update(Post(id = 1, date = 1000023, text = "New Post")))
     ws.printPosts()
+    println(ws.createComment(3, Comments(168, "New Comment")))
 }
 
+class PostNotFoundException(message: String): RuntimeException(message)
+
 class WallService {
+    var comments = emptyArray<Comments>()
     var posts = emptyArray<Post>()
     private var id = 1
+
+    fun createComment(postId: Int, comment: Comments): Comments {
+        val index = posts.indexOfFirst { p -> p.id == postId}
+        if (index == -1) throw PostNotFoundException("Post not found") else{
+            comments += comment
+            return comments.last()
+        }
+    }
 
     fun add(post: Post): Post {
         posts += post.copy(id = id)
@@ -90,12 +104,12 @@ data class Post(
     var likes: Likes = Likes(0, userLikes = true, canLikes = true, canPublish = true),
     var views: Views = Views(0),
     val geo: Geo = Geo("01.00000, 01.00000"),
-    var comments: Comments = Comments(0),
+    var comments: Comments = Comments(0," "),
     val postType: String = "Post",
     val attachments: Array<Attachments> = emptyArray()
 ) {
     override fun toString(): String {
-        return "id = $id, date = $date, text = $text, attachment = ${attachments.joinToString()}"
+        return "id = $id, date = $date, text = $text, comments = $comments, attachment = ${attachments.joinToString()}"
     }
 
     override fun equals(other: Any?): Boolean {
@@ -256,7 +270,8 @@ data class Geo(
 )
 
 data class Comments(
-    var count: Int
+    var id: Int,
+    var text: String
 )
 
 
