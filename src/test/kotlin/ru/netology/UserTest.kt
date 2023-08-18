@@ -1,8 +1,8 @@
 package ru.netology
 
 import User
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.Assertions
+import org.junit.Test
+import org.junit.Assert.*
 
 class UserTest {
 
@@ -13,7 +13,7 @@ class UserTest {
         val user1 = User("Ivan", balance = 446980, age = 29)
         val result = user1.getComission(totalSum, amountTransfer)
 
-        Assertions.assertEquals(null, result)
+        assertEquals(null, result)
     }
 
     @Test
@@ -23,7 +23,7 @@ class UserTest {
         val user1 = User("Ivan", balance = 446980, age = 29)
         val result = user1.getComission(totalSum, amountTransfer)
 
-        Assertions.assertEquals(0.0, result)
+        assertEquals(0.0, result)
     }
 
     @Test
@@ -33,7 +33,7 @@ class UserTest {
         val user1 = User("Ivan", balance = 446980, age = 29)
         val result = user1.getComission(totalSum, amountTransfer)
 
-        Assertions.assertEquals(null, result)
+        assertEquals(null, result)
     }
 
     @Test
@@ -43,7 +43,7 @@ class UserTest {
         val user1 = User("Ivan", balance = 446980, age = 29)
         val result = user1.getComission(totalSum, amountTransfer)
 
-        Assertions.assertEquals(null, result)
+        assertEquals(null, result)
     }
 
     @Test
@@ -53,9 +53,8 @@ class UserTest {
         val user1 = User("Ivan", balance = 446980, age = 29)
         val result = user1.getComission(totalSum, amountTransfer)
 
-        Assertions.assertEquals(null, result)
+        assertEquals(null, result)
     }
-
 
     @Test
     fun `get comission in to min sum (Mastercard & Maestro)`() {
@@ -64,7 +63,7 @@ class UserTest {
         val user2 = User("Nikolay", balance = 235000, age = 32, CardType.MASTERCARD)
         val result = user2.getComission(totalSum, amountTransfer)
 
-        Assertions.assertEquals(0.0, result)
+        assertEquals(0.0, result)
     }
 
     @Test
@@ -74,7 +73,7 @@ class UserTest {
         val user2 = User("Nikolay", balance = 235000, age = 32, CardType.MASTERCARD)
         val result = user2.getComission(totalSum, amountTransfer)
 
-        Assertions.assertEquals(500.0, result)
+        assertEquals(500.0, result)
     }
 
     @Test
@@ -84,7 +83,7 @@ class UserTest {
         val user2 = User("Nikolay", balance = 235000, age = 32, CardType.MASTERCARD)
         val result = user2.getComission(totalSum, amountTransfer)
 
-        Assertions.assertEquals(null, result)
+        assertEquals(null, result)
     }
 
     @Test
@@ -94,7 +93,7 @@ class UserTest {
         val user2 = User("Nikolay", balance = 235000, age = 32, CardType.MASTERCARD)
         val result = user2.getComission(totalSum, amountTransfer)
 
-        Assertions.assertEquals(null, result)
+        assertEquals(null, result)
     }
 
     @Test
@@ -104,9 +103,8 @@ class UserTest {
         val user2 = User("Nikolay", balance = 235000, age = 32, CardType.MASTERCARD)
         val result = user2.getComission(totalSum, amountTransfer)
 
-        Assertions.assertEquals(null, result)
+        assertEquals(null, result)
     }
-
 
     @Test
     fun `get comission in to min sum (VISA & MIR)`() {
@@ -115,7 +113,7 @@ class UserTest {
         val user3 = User("Sergey", balance = 369009, age = 23, CardType.VISA)
         val result = user3.getComission(totalSum, amountTransfer)
 
-        Assertions.assertEquals(35.0, result)
+        assertEquals(35.0, result)
     }
 
     @Test
@@ -125,7 +123,7 @@ class UserTest {
         val user3 = User("Sergey", balance = 369009, age = 23, CardType.VISA)
         val result = user3.getComission(totalSum, amountTransfer)
 
-        Assertions.assertEquals(200.0, result)
+        assertEquals(200.0, result)
     }
 
     @Test
@@ -135,7 +133,7 @@ class UserTest {
         val user3 = User("Sergey", balance = 369009, age = 23, CardType.VISA)
         val result = user3.getComission(totalSum, amountTransfer)
 
-        Assertions.assertEquals(null, result)
+        assertEquals(null, result)
     }
 
     @Test
@@ -145,7 +143,7 @@ class UserTest {
         val user3 = User("Sergey", balance = 369009, age = 23, CardType.VISA)
         val result = user3.getComission(totalSum, amountTransfer)
 
-        Assertions.assertEquals(null, result)
+        assertEquals(null, result)
     }
 
     @Test
@@ -155,6 +153,6 @@ class UserTest {
         val user3 = User("Sergey", balance = 369009, age = 23, CardType.VISA)
         val result = user3.getComission(totalSum, amountTransfer)
 
-        Assertions.assertEquals(null, result)
+        assertEquals(null, result)
     }
 }
