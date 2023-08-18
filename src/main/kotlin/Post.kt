@@ -10,7 +10,7 @@ data class Post(
     val reposts: Repost = Repost(0, false),
     val postSource: PostSource = PostSource(null, null, null, null),
     val signerId: Int = 168,
-    val copyHistory: List<Post> = emptyList(),
+    val copyHistory: ArrayList<Post>? = null,
     val canPin: Boolean = false,
     val canDelete: Boolean = false,
     val canEdit: Boolean = false,
@@ -24,10 +24,10 @@ data class Post(
     val geo: Geo = Geo("01.00000, 01.00000"),
     var comments: Comment = Comment(0, " "),
     val postType: String = "Post",
-    val attachments: List<Attachment> = emptyList()
+    val attachments: ArrayList<Attachment>? = null
 ) {
     override fun toString(): String {
-        return "id = $id, date = $date, text = $text, comments = $comments, attachment = ${attachments.joinToString()}"
+        return "id = $id, date = $date, text = $text, comments = $comments, attachment = ${attachments?.joinToString()}"
     }
 }
 
