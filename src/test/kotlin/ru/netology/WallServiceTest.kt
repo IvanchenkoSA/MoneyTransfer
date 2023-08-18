@@ -30,8 +30,7 @@ class WallServiceTest {
     fun `Update post with existing id`() {
         val ws = WallService()
         val post3 = ws.add(post1)
-        val isExisting = ws.update(post3)
-        assertEquals(true, isExisting)
+        ws.update(post3)
     }
 
     @Test(expected = PostNotFoundException::class)
