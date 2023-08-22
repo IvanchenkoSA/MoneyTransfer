@@ -63,7 +63,39 @@ fun main() {
         null -> println("Out of limit")
         else -> println("Комиссия составит - $comission")
     }
+
+    val ns = NoteServiceImplements()
+    var note1 = Note(id = 10, title = "New title", text = "ABOBA")
+    var note2 = Note(id = 11, title = "New title1", text = "ABOBA1")
+    var note3 = Note(id = 12, title = "New title2", text = "ABOBA2")
+    var note4 = Note(id = 13, title = "New title3", text = "ABOBA3")
+    ns.addNote(note1)
+    ns.addNote(note2)
+    ns.addNote(note3)
+    ns.addNote(note4)
+    ns.printNotes()
+    ns.createComment(noteId = 10, Comment(text = "First comment"))
+    ns.createComment(noteId = 12, Comment(text = "Second comment"))
+    println("_______________")
+    ns.printNotes()
+    ns.deleteComment(10, 1)
+    println("_______________")
+    ns.printNotes()
+    ns.restoreComment(10, 1)
+    println("_______________")
+    ns.printNotes()
+    ns.editNote(10, "NEW TITLE", "NEW TEXT")
+    println("_______________")
+    ns.printNotes()
+    ns.editComment(12, 2, Comment(text = "EDITED COMMENT"))
+    println("_______________")
+    ns.printNotes()
+    println("_______________")
+    ns.getNoteById(10)
+    println("_______________")
+    ns.getNoteComments(12)
 }
+
 
 
 

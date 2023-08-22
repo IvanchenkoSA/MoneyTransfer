@@ -126,6 +126,7 @@ data class Geo(
 )
 
 data class Comment(
-    var id: Int,
-    var text: String
+    var id: Int = 0,
+    val text: String?,
+    var isDeleted: Boolean = false
 )
