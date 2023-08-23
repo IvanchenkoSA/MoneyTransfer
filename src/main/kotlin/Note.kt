@@ -1,5 +1,5 @@
 data class Note(
-    val id: Int,
+    var id: Int = 0,
     var title: String,
     var text: String,
     var privacy: Int = 0,
@@ -7,11 +7,14 @@ data class Note(
     var comments: ArrayList<Comment> = arrayListOf()
 ) {
     override fun toString(): String {
-        if (comments.isEmpty()) {
-            return "id = $id, title = $title, text = $text"
-        }
         return "id = $id, title = $title, text = $text, comments = ${
             comments.filter { comment -> !comment.isDeleted }.joinToString()
         }"
     }
 }
+
+data class Comment(
+    var id: Int = 0,
+    var text: String,
+    var isDeleted: Boolean = false
+)

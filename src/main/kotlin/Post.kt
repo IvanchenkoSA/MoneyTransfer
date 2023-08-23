@@ -125,8 +125,3 @@ data class Geo(
     val coordinates: String,
 )
 
-data class Comment(
-    var id: Int = 0,
-    val text: String?,
-    var isDeleted: Boolean = false
-)

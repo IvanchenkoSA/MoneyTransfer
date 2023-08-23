@@ -1,5 +1,5 @@
 fun main() {
-    var post1 = Post(
+    val post1 = Post(
         id = 0,
         date = 1246892,
         text = "Hello World",
@@ -11,7 +11,7 @@ fun main() {
             StickerAttachment(Sticker(11, 2))
         )
     )
-    var post2 = Post(
+    val post2 = Post(
         id = 1,
         date = 345612,
         text = "aboba",
@@ -23,7 +23,7 @@ fun main() {
             StickerAttachment(Sticker(11, 2))
         )
     )
-    var post3 = Post(
+    val post3 = Post(
         id = 2,
         date = 793455,
         text = "фищиф",
@@ -35,7 +35,7 @@ fun main() {
             StickerAttachment(Sticker(11, 2))
         )
     )
-    var ws = WallService()
+    val ws = WallService()
     ws.add(post1)
     ws.add(post2)
     ws.add(post3)
@@ -64,36 +64,36 @@ fun main() {
         else -> println("Комиссия составит - $comission")
     }
 
-    val ns = NoteServiceImplements()
-    var note1 = Note(id = 10, title = "New title", text = "ABOBA")
-    var note2 = Note(id = 11, title = "New title1", text = "ABOBA1")
-    var note3 = Note(id = 12, title = "New title2", text = "ABOBA2")
-    var note4 = Note(id = 13, title = "New title3", text = "ABOBA3")
+    val ns = NoteServiceImpl()
+    val note1 = Note(title = "New title", text = "ABOBA")
+    val note2 = Note(title = "New title1", text = "ABOBA1")
+    val note3 = Note(title = "New title2", text = "ABOBA2")
+    val note4 = Note(title = "New title3", text = "ABOBA3")
     ns.addNote(note1)
     ns.addNote(note2)
     ns.addNote(note3)
     ns.addNote(note4)
     ns.printNotes()
-    ns.createComment(noteId = 10, Comment(text = "First comment"))
-    ns.createComment(noteId = 12, Comment(text = "Second comment"))
+    ns.createComment(noteId = note1.id, Comment(text = "First comment"))
+    ns.createComment(noteId = note3.id, Comment(text = "Second comment"))
     println("_______________")
     ns.printNotes()
-    ns.deleteComment(10, 1)
+    ns.deleteComment(note1.id, 1)
     println("_______________")
     ns.printNotes()
-    ns.restoreComment(10, 1)
+    ns.restoreComment(note1.id, 1)
     println("_______________")
     ns.printNotes()
-    ns.editNote(10, "NEW TITLE", "NEW TEXT")
+    ns.editNote(note1.id, "NEW TITLE", "NEW TEXT")
     println("_______________")
     ns.printNotes()
-    ns.editComment(12, 2, Comment(text = "EDITED COMMENT"))
+    ns.editComment(note3.id, 2, "EDITED COMMENT")
     println("_______________")
     ns.printNotes()
     println("_______________")
-    ns.getNoteById(10)
+    println(ns.getNoteById(note1.id))
     println("_______________")
-    ns.getNoteComments(12)
+    println(ns.getNoteComments(note3.id))
 }
 
 
