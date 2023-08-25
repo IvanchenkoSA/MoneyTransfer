@@ -5,12 +5,12 @@ class NoteServiceImpl : NotesService {
 
 
     override fun addNote(note: Note) {
-        note.id += noteId
+        note.id = noteId++
         notes += note
     }
 
-    override fun printNotes() {
-        println(notes.joinToString(separator = "\n"))
+    override fun getNotes(): List<Note> {
+        return notes
     }
 
     override fun createComment(noteId: Int, comment: Comment): Int {
@@ -21,46 +21,41 @@ class NoteServiceImpl : NotesService {
         return comment.id
     }
 
-    override fun deleteNote(noteId: Int): Int {
+    override fun deleteNote(noteId: Int) {
         val index = notes.indexOfFirst { note -> note.id == noteId }
         if (index == -1) throw NotFoundException("Note not found")
         notes.removeAt(index)
-        return 1
     }
 
-    override fun deleteComment(noteId: Int, commentId: Int): Int {
+    override fun deleteComment(noteId: Int, commentId: Int) {
         val comment: Comment = notes.find { note -> note.id == noteId }
             ?.comments
             ?.find { comment -> comment.id == commentId }
             ?: throw NotFoundException("Comment not found")
         comment.isDeleted = true
-        return 1
     }
 
-    override fun restoreComment(noteId: Int, commentId: Int): Int {
+    override fun restoreComment(noteId: Int, commentId: Int) {
         val comment: Comment = notes.find { note -> note.id == noteId }
             ?.comments
             ?.find { comment -> comment.id == commentId }
             ?: throw NotFoundException("Comment not found")
         comment.isDeleted = false
-        return 1
     }
 
-    override fun editNote(noteId: Int, title: String, text: String): Int {
+    override fun editNote(noteId: Int, title: String, text: String) {
         val index = notes.indexOfFirst { note -> note.id == noteId }
         if (index == -1) throw NotFoundException("Note not found")
         notes[index] = notes[index].copy(title = title, text = text)
-        return 1
     }
 
-    override fun editComment(noteId: Int, commentId: Int, text: String): Int {
+    override fun editComment(noteId: Int, commentId: Int, text: String) {
         val comment: Comment = notes
             .find { note -> note.id == noteId }
             ?.comments
             ?.find { comment -> comment.id == commentId }
             ?: throw NotFoundException("Comment not found")
         comment.text = text
-        return 1
     }
 
     override fun getNoteById(noteId: Int): Note {

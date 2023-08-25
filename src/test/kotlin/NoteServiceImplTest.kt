@@ -24,15 +24,15 @@ class NoteServiceImplTest {
     fun `delete existing note`() {
         val ns = NoteServiceImpl()
         ns.addNote(note)
-        val result = ns.deleteNote(note.id)
-        assertEquals(1, result)
+        ns.deleteNote(note.id)
+        val result = ns.getNotes().size
+        assertEquals(0, result)
     }
 
     @Test(expected = NotFoundException::class)
     fun `delete non-existent note`() {
         val ns = NoteServiceImpl()
         ns.deleteNote(note.id)
-
     }
 
     @Test
@@ -40,8 +40,9 @@ class NoteServiceImplTest {
         val ns = NoteServiceImpl()
         ns.addNote(note)
         ns.createComment(note.id, comment)
-        val result = ns.deleteComment(note.id, comment.id)
-        assertEquals(1, result)
+        ns.deleteComment(note.id, comment.id)
+        val result = comment.isDeleted
+        assertEquals(true, result)
     }
 
     @Test(expected = NotFoundException::class)
@@ -55,8 +56,8 @@ class NoteServiceImplTest {
         val ns = NoteServiceImpl()
         ns.addNote(note)
         ns.createComment(note.id, comment)
-        val result = ns.restoreComment(note.id, comment.id)
-        assertEquals(1, result)
+        val result = comment.isDeleted
+        assertEquals(false, result)
     }
 
     @Test(expected = NotFoundException::class)
@@ -66,14 +67,19 @@ class NoteServiceImplTest {
         ns.deleteComment(note.id, comment.id)
     }
 
-
     @Test
     fun `edit existing note`() {
         val ns = NoteServiceImpl()
+        note.title = TEST_TITLE_1
+        note.text = TEST_TEXT_1
         ns.addNote(note)
-        val result = ns.editNote(note.id, title = "test title", text = "test text")
-        assertEquals(1, result)
+        ns.editNote(note.id, title = TEST_TITLE_2, text = TEST_TEXT_2)
+        val editedNote = ns.getNoteById(note.id)
+
+        assertEquals(TEST_TITLE_2, editedNote.title)
+        assertEquals(TEST_TEXT_2, editedNote.text)
     }
+
 
     @Test(expected = NotFoundException::class)
     fun `edit non-existing note`() {
@@ -86,9 +92,10 @@ class NoteServiceImplTest {
     fun `edit existing comment`() {
         val ns = NoteServiceImpl()
         ns.addNote(note)
+        comment.text = TEST_TEXT_1
         ns.createComment(note.id, comment)
-        val result = ns.editComment(note.id, comment.id, text = "test text")
-        assertEquals(1, result)
+        ns.editComment(note.id, comment.id, text = TEST_TEXT_2)
+        assertEquals(TEST_TEXT_2, note.comments[0].text)
     }
 
     @Test(expected = NotFoundException::class)
@@ -127,4 +134,13 @@ class NoteServiceImplTest {
         val ns = NoteServiceImpl()
         ns.getNoteComments(note.id)
     }
+
+
+    companion object {
+        private const val TEST_TITLE_1 = "test title 1"
+        private const val TEST_TITLE_2 = "test title 2"
+        private const val TEST_TEXT_1 = "test text 1"
+        private const val TEST_TEXT_2 = "test text 2"
+    }
 }
+
