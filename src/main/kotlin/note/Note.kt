@@ -1,3 +1,5 @@
+package note
+
 data class Note(
     var id: Int = 0,
     var title: String,

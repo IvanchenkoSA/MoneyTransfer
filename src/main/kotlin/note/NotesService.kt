@@ -1,3 +1,5 @@
+package note
+
 interface NotesService {
     fun addNote(note: Note)
     fun getNotes(): List<Note>

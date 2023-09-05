@@ -1,3 +1,7 @@
+package wall
+
+import note.Comment
+
 data class Post(
     var id: Int,
     val fromId: Int? = null,

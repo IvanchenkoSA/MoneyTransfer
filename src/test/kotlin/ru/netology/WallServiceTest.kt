@@ -1,9 +1,9 @@
 package ru.netology
 
-import Comment
-import Post
-import NotFoundException
-import WallService
+import note.Comment
+import wall.Post
+import exception.NotFoundException
+import wall.WallService
 import org.junit.Assert.*
 import org.junit.Test
 

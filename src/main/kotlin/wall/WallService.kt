@@ -1,3 +1,8 @@
+package wall
+
+import exception.NotFoundException
+import note.Comment
+
 class WallService {
     private var comments = ArrayList<Comment>()
     private var posts = ArrayList<Post>()

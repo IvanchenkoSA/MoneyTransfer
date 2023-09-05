@@ -1,3 +1,7 @@
+import exception.NotFoundException
+import note.Comment
+import note.Note
+import note.NoteServiceImpl
 import org.junit.Test
 
 import org.junit.Assert.*

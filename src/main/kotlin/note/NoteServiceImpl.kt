@@ -1,3 +1,7 @@
+package note
+
+import exception.NotFoundException
+
 class NoteServiceImpl : NotesService {
     private var noteId = 1
     private var commentId = 1
