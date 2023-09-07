@@ -24,10 +24,18 @@ class ChatServiceImpl : ChatService {
             ?: throw NotFoundException("Chat not found")
     }
 
-    override fun deletMessage(user1Id: Int, user2Id: Int, messageId: Int): Message {
+    override fun getLastMessages(userId: Int): List<Message> {
+        return getUserChats(userId).map { chat -> chat.messages.last() }
+    }
+
+    override fun getUnreadChatsCount(userId: Int): Int {
+        return getUserChats(userId).count{chat -> !chat.isRead }
+    }
+
+    override fun deletMessage(user1Id: Int, user2Id: Int, messageId: Int) {
         val id = setOf(user1Id, user2Id)
         val chatIndex = chats.indexOfFirst { chat -> chat.id == id }
-        return chats[chatIndex].messages.removeAt(messageId - 1)
+        chats[chatIndex].messages.removeIf{ it.id == messageId }
     }
 
     override fun getChats(): List<Chat> {
@@ -35,9 +43,7 @@ class ChatServiceImpl : ChatService {
     }
 
     override fun getUserChats(userId: Int): List<Chat> {
-        val list = ArrayList<Chat>()
-        list += chats[userId]
-        return list
+        return chats.filter { chat -> chat.id.contains(userId) }
     }
 
     override fun deleteChat(user1Id: Int, user2Id: Int): Chat {
@@ -49,7 +55,6 @@ class ChatServiceImpl : ChatService {
     override fun createMessage(senderId: Int, receiverId: Int, text: String): Message {
         return Message(messageId++, senderId, receiverId, text)
     }
-
 
 
 }
