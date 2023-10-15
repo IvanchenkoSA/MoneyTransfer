@@ -1,3 +1,8 @@
+package wall
+
+import exception.NotFoundException
+import note.Comment
+
 class WallService {
     private var comments = ArrayList<Comment>()
     private var posts = ArrayList<Post>()
@@ -5,7 +10,7 @@ class WallService {
 
     fun createComment(postId: Int, comment: Comment): Comment {
         val index = posts.indexOfFirst { p -> p.id == postId }
-        if (index == -1) throw PostNotFoundException("Post not found")
+        if (index == -1) throw NotFoundException("Post not found")
         comments += comment
         return comments.last()
 
@@ -19,7 +24,7 @@ class WallService {
 
     fun update(newPost: Post) {
         val index = posts.indexOfFirst { p -> p.id == newPost.id }
-        if (index == -1) throw PostNotFoundException("Post not found")
+        if (index == -1) throw NotFoundException("Post not found")
         posts[index] = posts[index].copy(
             date = newPost.date,
             text = newPost.text

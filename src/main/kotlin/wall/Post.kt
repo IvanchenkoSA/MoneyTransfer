@@ -1,3 +1,7 @@
+package wall
+
+import note.Comment
+
 data class Post(
     var id: Int,
     val fromId: Int? = null,
@@ -125,7 +129,3 @@ data class Geo(
     val coordinates: String,
 )
 
-data class Comment(
-    var id: Int,
-    var text: String
-)
