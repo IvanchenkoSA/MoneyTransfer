@@ -24,7 +24,7 @@ class ChatServiceImpl : ChatService {
             ?: throw NotFoundException("Chat not found")
     }
 
-    override fun getLastMessages(userId: Int): List<Message> {
+    override fun getLastMessages(userId: Int): Sequence<Message> {
         return getUserChats(userId).map { chat -> chat.messages.last() }
     }
 
@@ -42,8 +42,9 @@ class ChatServiceImpl : ChatService {
         return chats
     }
 
-    override fun getUserChats(userId: Int): List<Chat> {
-        return chats.filter { chat -> chat.id.contains(userId) }
+    override fun getUserChats(userId: Int): Sequence<Chat> {
+        val chatsSequence = chats.asSequence()
+        return chatsSequence.filter { chat -> chat.id.contains(userId) }
     }
 
     override fun deleteChat(user1Id: Int, user2Id: Int): Chat {
